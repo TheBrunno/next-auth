@@ -1,17 +1,18 @@
 import * as React from "react"
- 
+
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import AuthActions from "../actions/auth-actions"
 
 export default function LoginForm() {
     return (
@@ -20,8 +21,8 @@ export default function LoginForm() {
                 <CardTitle>Next auth</CardTitle>
                 <CardDescription>Faça login para continuar</CardDescription>
             </CardHeader>
-            <CardContent>
-                <form>
+            <form action={AuthActions.login}>
+                <CardContent>
                     <div className="grid w-full items-center gap-4">
                         <div className="flex flex-col space-y-1.5">
                             <Label htmlFor="email">E-mail</Label>
@@ -29,15 +30,15 @@ export default function LoginForm() {
                         </div>
                         <div className="flex flex-col space-y-1.5">
                             <Label htmlFor="password">Senha</Label>
-                            <Input id="password" name="password" required />
+                            <Input id="password" name="password" required type="password" />
                         </div>
                     </div>
-                </form>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-                <Button>Entrar</Button>
-                <Link href='/portal/cadastro' className={buttonVariants({ variant: 'link' })}>Criar conta</Link>
-            </CardFooter>
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                    <Button>Entrar</Button>
+                    <Link href='/portal/cadastro' className={buttonVariants({ variant: 'link' })}>Criar conta</Link>
+                </CardFooter>
+            </form>
         </Card>
 
     )
