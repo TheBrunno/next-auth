@@ -14,7 +14,7 @@ async function createAccount(formData: FormData) {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
         data: {
             name,
             email,
@@ -22,11 +22,16 @@ async function createAccount(formData: FormData) {
         }
     });
     console.log('Cadastrado com sucesso!');
-    redirect('/portal/login');
+
+    await AuthServices.createSessionToken({ sub: user.id, name: user.name, email: user.email });
+
+    redirect('/portal');
 }
 
 async function login(formData: FormData) {
     'use server';
+
+    console.log(formData)
 
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -45,8 +50,10 @@ async function login(formData: FormData) {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-        console.log('usuario ou senha incorreta'); // posso usar optimistic -> atualizar a tela
+      console.log('Usuário ou senha inválidos'); // posso usar optimistic -> atualizar a tela
+      redirect('/portal/login');
     }
+
     await AuthServices.createSessionToken({ sub: user.id, name: user.name, email: user.email });
 
     redirect('/portal');
