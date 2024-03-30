@@ -11,14 +11,21 @@ const publicRoutes = [
     '/portal/login'
 ];
 
+const onlyGuessRoutes = [
+    '/portal/cadastro',
+    '/portal/login'
+]
+
 export async function middleware(req: NextRequest){
     const pathname = req.nextUrl.pathname;
 
+    const session = await AuthServices.isSessionValid();
+    if(onlyGuessRoutes.includes(pathname) && session){
+        return NextResponse.redirect(new URL('/portal', req.url))
+    }
     if(publicRoutes.includes(pathname)){
         return NextResponse.next();
     }
-    const session = await AuthServices.isSessionValid();
-
     if(!session){
         const isAPIRoute = pathname.startsWith('/api');
         if(isAPIRoute){
@@ -26,4 +33,6 @@ export async function middleware(req: NextRequest){
         }
         return NextResponse.redirect(new URL('/portal/login', req.url))
     }
+
+    NextResponse.next();
 }
