@@ -1,4 +1,5 @@
 import UsersList from "@/modules/users/components/users-list";
+import Link from "next/link";
 
 export default function PortalPage() {
   return (
@@ -6,6 +7,8 @@ export default function PortalPage() {
       <h1 className="text-4xl font-bold">Pagina do Portal</h1>
 
       <UsersList />
+
+      <Link href="/api/logout" className="text-blue-500">Logout</Link>
     </main>
   );
 }
